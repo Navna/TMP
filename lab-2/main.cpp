@@ -89,14 +89,6 @@ public:
     }
 };
 
-namespace std {
-    // Специализация шаблона
-    template<>
-    void swap(Vector& lhs, Vector& rhs) noexcept {
-        lhs.Swap(rhs);
-    }
-}
-
 Vector& operator+=(Vector& lhs, const Vector& rhs) {
     if (lhs.GetSize() != rhs.GetSize()) {
         throw std::logic_error("Vectors must have the same size!");
