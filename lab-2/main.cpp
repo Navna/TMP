@@ -1,11 +1,14 @@
 #include <algorithm>
 #include <stdexcept>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 
 class Vector {
     float* data;
     size_t size;
+    mutable bool isCacheValid = false;
+    mutable float normCache = 0.0f;
 
 public:
     Vector(size_t size) : data(new float[size]), size(size) {
@@ -14,14 +17,14 @@ public:
         }
     }
 
-    Vector(const Vector& rhs) : data(new float[rhs.size]), size(rhs.size) {
+    Vector(const Vector& rhs) : data(new float[rhs.size]), size(rhs.size), isCacheValid(rhs.isCacheValid), normCache(rhs.normCache) {
         puts("COPY-CTOR");
         for (size_t i = 0; i < size; ++i) {
             data[i] = rhs.data[i];
         }
     }
 
-    Vector(Vector&& rhs) noexcept : data(rhs.data), size(rhs.size) {
+    Vector(Vector&& rhs) noexcept : data(rhs.data), size(rhs.size), isCacheValid(rhs.isCacheValid), normCache(rhs.normCache) {
         puts("MOVE-CTOR");
         rhs.data = nullptr;
         rhs.size = 0;
@@ -44,6 +47,8 @@ public:
         puts("CUSTOM SWAP");
         std::swap(data, rhs.data);
         std::swap(size, rhs.size);
+        std::swap(isCacheValid, rhs.isCacheValid);
+        std::swap(normCache, rhs.normCache);
     }
 
     size_t GetSize() const {
@@ -54,6 +59,7 @@ public:
         if (index >= size) {
             throw std::logic_error("Index out of range!");
         }
+
         return data[index];
     }
 
@@ -61,7 +67,21 @@ public:
         if (index >= size) {
             throw std::logic_error("Index out of range!");
         }
+        isCacheValid = false;
         return data[index];
+    }
+
+    float GetEuclidNorm() const {
+        if (isCacheValid) {
+            return normCache;
+        }
+        normCache = 0.0f;
+        for (size_t i = 0; i < size; ++i) {
+            normCache += data[i] * data[i];
+        }
+        normCache = std::sqrt(normCache);
+        isCacheValid = true;
+        return normCache;
     }
 
     ~Vector() { // noexcept
