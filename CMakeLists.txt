@@ -16,3 +16,4 @@ elseif(CMAKE_COMPILER_IS_GNUCC) # Компилятор GCC
 endif()
 
 add_subdirectory(lab-2)
+add_subdirectory(lab-3)
