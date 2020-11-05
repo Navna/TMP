@@ -39,7 +39,7 @@ public:
     // См. https://en.cppreference.com/w/cpp/iterator/iterator_traits
     using difference_type = ptrdiff_t;                   // A signed integer type that can be used to identify distance between iterators.
     using value_type = Person;                           // The type of the values that can be obtained by dereferencing the iterator. This type is void for output iterators.
-    using pointer = Person*;                             // Defines a pointer to the type iterated over (value_type).
+    using pointer = const Person*;                             // Defines a pointer to the type iterated over (value_type).
     using reference = const Person&;                     // Defines a reference to the type iterated over (value_type).
     using iterator_category = std::forward_iterator_tag; // The category of the iterator. Must be one of iterator category tags: https://en.cppreference.com/w/cpp/iterator/iterator_tags.
 

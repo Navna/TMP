@@ -22,6 +22,12 @@ public:
         ConstIterator(Node* node) : node(node) { }
 
     public:
+        using difference_type = ptrdiff_t;
+        using value_type = T;
+        using pointer = const T*;
+        using reference = const T&;
+        using iterator_category = std::bidirectional_iterator_tag;
+
         friend class List<T>;
 
         ConstIterator& operator++() {
