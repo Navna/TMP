@@ -67,8 +67,9 @@ public:
         // TODO List::List(List<T>&& rhs)
     }
 
-    List<T>& operator=(List<T> rhs) {
-        swap(rhs);
+    List<T>& operator=(const List<T>& rhs) {
+        auto temp(rhs);
+        swap(temp);
         return *this;
     }
 

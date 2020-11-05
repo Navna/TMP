@@ -23,8 +23,9 @@ public:
         rhs._size = 0;
     }
 
-    Vector<T>& operator=(Vector<T> rhs) {
-        swap(rhs);
+    Vector<T>& operator=(const Vector<T>& rhs) {
+        auto temp(rhs);
+        swap(temp);
         return *this;
     }
 
