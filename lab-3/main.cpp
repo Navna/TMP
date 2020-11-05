@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <iostream>
 #include <list>
 #include <vector>
@@ -7,26 +6,6 @@
 #include "vector.h"
 
 using namespace std;
-
-struct SomeType {
-    SomeType() {
-        puts("default");
-    }
-    SomeType(const SomeType&) {
-        puts("copy ctor");
-    }
-    SomeType(SomeType&&) noexcept {
-        puts("move ctor");
-    }
-    SomeType& operator=(const SomeType&) {
-        puts("copy assign");
-        return *this;
-    }
-    SomeType& operator=(SomeType&&) noexcept {
-        puts("move assign");
-        return *this;
-    }
-};
 
 template<typename T>
 using CollectionType = std::list<T>;
