@@ -18,20 +18,20 @@ struct PersonNode {
     PersonNode(const Person& person, PersonNode* next) : person(person), next(next) { }
 };
 
-int PersonAgeComparator(const Person& lhs, const Person& rhs) {
-    return lhs.age - rhs.age;
+bool PersonAgeComparator(const Person& lhs, const Person& rhs) {
+    return lhs.age < rhs.age;
 }
 
 struct PersonWeightComparator {
-    int operator()(const Person& lhs, const Person& rhs) {
-        return lhs.weight - rhs.weight;
+    bool operator()(const Person& lhs, const Person& rhs) {
+        return lhs.weight < rhs.weight;
     }
 };
 
-// Пример, что такое итератор
-// Как в других языках
-// bool MoveNext();
-// Person GetValue();
+// Пример итератора по связному списку
+// Как в других языках:
+//     bool MoveNext();
+//     Person GetValue();
 class PersonListIterator {
     PersonNode* node;
 
@@ -61,7 +61,7 @@ Iterator FindMin(Iterator begin, Iterator end, Comparator comparator) {
     Iterator min = begin;
     ++begin;
     while (begin != end) {
-        if (comparator(*begin, *min) < 0) {
+        if (comparator(*begin, *min)) {
             min = begin;
         }
         ++begin;
@@ -78,7 +78,7 @@ int main() {
 
     PersonWeightComparator weightComparator;
 
-    // Пример работы с указаталем на функцию
+    // МаПример работы с указаталем на функцию
     const auto ageIterator1 = FindMin(persons, persons + sizeof(persons) / sizeof(*persons), PersonAgeComparator);
     auto listIterator = FindMin(PersonListIterator(head), PersonListIterator(nullptr), PersonAgeComparator);
 
@@ -96,6 +96,7 @@ int main() {
     printf("MIN: Index=%td Age=%d Weight=%f\n", weightIterator - persons, weightIterator->age, weightIterator->weight);
 
     // Пример работы с std::algorithm
+    // У всех ли людей в списке возраст превышает указанное значение?
     printf("all_of: %d\n", std::all_of(PersonListIterator(head), PersonListIterator(nullptr),
         [](const Person& p) {
             return p.age >= 19;

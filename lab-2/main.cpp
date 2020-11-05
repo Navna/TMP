@@ -4,10 +4,11 @@
 #include <cstdio>
 #include <cstdlib>
 
+// Не забыть разделить этот класс на .h и .cpp!
 class Vector {
     float* data;
     size_t size;
-    mutable bool isCacheValid = false;
+    mutable bool isNormCacheValid = false;
     mutable float normCache = 0.0f;
 
 public:
@@ -17,14 +18,14 @@ public:
         }
     }
 
-    Vector(const Vector& rhs) : data(new float[rhs.size]), size(rhs.size), isCacheValid(rhs.isCacheValid), normCache(rhs.normCache) {
+    Vector(const Vector& rhs) : data(new float[rhs.size]), size(rhs.size), isNormCacheValid(rhs.isNormCacheValid), normCache(rhs.normCache) {
         puts("COPY-CTOR");
         for (size_t i = 0; i < size; ++i) {
             data[i] = rhs.data[i];
         }
     }
 
-    Vector(Vector&& rhs) noexcept : data(rhs.data), size(rhs.size), isCacheValid(rhs.isCacheValid), normCache(rhs.normCache) {
+    Vector(Vector&& rhs) noexcept : data(rhs.data), size(rhs.size), isNormCacheValid(rhs.isNormCacheValid), normCache(rhs.normCache) {
         puts("MOVE-CTOR");
         rhs.data = nullptr;
         rhs.size = 0;
@@ -47,7 +48,7 @@ public:
         puts("CUSTOM SWAP");
         std::swap(data, rhs.data);
         std::swap(size, rhs.size);
-        std::swap(isCacheValid, rhs.isCacheValid);
+        std::swap(isNormCacheValid, rhs.isNormCacheValid);
         std::swap(normCache, rhs.normCache);
     }
 
@@ -67,12 +68,12 @@ public:
         if (index >= size) {
             throw std::logic_error("Index out of range!");
         }
-        isCacheValid = false;
+        isNormCacheValid = false;
         return data[index];
     }
 
     float GetEuclidNorm() const {
-        if (isCacheValid) {
+        if (isNormCacheValid) {
             return normCache;
         }
         normCache = 0.0f;
@@ -80,11 +81,11 @@ public:
             normCache += data[i] * data[i];
         }
         normCache = std::sqrt(normCache);
-        isCacheValid = true;
+        isNormCacheValid = true;
         return normCache;
     }
 
-    ~Vector() { // noexcept
+    ~Vector() { // Всегда неявно noexcept
         delete[] data;
     }
 };
