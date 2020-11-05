@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdio>
 #include <utility>
 
 struct Int {

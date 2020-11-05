@@ -97,6 +97,7 @@ Vector& operator+=(Vector& lhs, const Vector& rhs) {
     for (size_t i = 0; i < size; ++i) {
         lhs[i] += rhs[i];
     }
+    return lhs;
 }
 
 Vector operator+(const Vector& lhs, const Vector& rhs) {
