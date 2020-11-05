@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstdio>
 
 struct Person {
@@ -5,6 +6,10 @@ struct Person {
     float weight;
     Person(int age, float weight) : age(age), weight(weight) {    }
 };
+
+void Print(const Person& p) {
+    printf("%d %f\n", p.age, p.weight);
+}
 
 struct PersonNode {
     Person person;
@@ -24,14 +29,31 @@ struct PersonWeightComparator {
 };
 
 // Пример, что такое итератор
-class PersonIterator {
-    // Как в других языках
-    //bool MoveNext();
-    //Person GetValue();
+// Как в других языках
+// bool MoveNext();
+// Person GetValue();
+class PersonListIterator {
+    PersonNode* node;
 
-    // Как в C++
-    void operator++();
-    Person& operator*();
+public:
+    PersonListIterator(PersonNode* node) : node(node) { }
+
+    PersonListIterator& operator++() {
+        node = node->next;
+        return *this;
+    }
+
+    Person& operator*() {
+        return node->person;
+    }
+
+    bool operator==(PersonListIterator rhs) {
+        return node == rhs.node;
+    }
+
+    bool operator!=(PersonListIterator rhs) {
+        return node != rhs.node;
+    }
 };
 
 template<typename Iterator, typename Comparator>
@@ -58,6 +80,7 @@ int main() {
 
     // Пример работы с указаталем на функцию
     const auto ageIterator1 = FindMin(persons, persons + sizeof(persons) / sizeof(*persons), PersonAgeComparator);
+    auto listIterator = FindMin(PersonListIterator(head), PersonListIterator(nullptr), PersonAgeComparator);
 
     // Пример с лямбда-выражением (анонимной функцией)
     const auto ageIterator2 = FindMin(persons, persons + sizeof(persons) / sizeof(*persons),
@@ -66,10 +89,20 @@ int main() {
         });
 
     // Пример работы с объектом компаратора
-    const auto weightIterator = FindMin(persons, persons +  sizeof(persons) / sizeof(*persons), weightComparator);
+    const auto weightIterator = FindMin(persons, persons + sizeof(persons) / sizeof(*persons), weightComparator);
+    printf("MIN: Age=%d Weight=%f\n", (*listIterator).age, (*listIterator).weight);
     printf("MIN: Index=%td Age=%d Weight=%f\n", ageIterator1 - persons, ageIterator1->age, ageIterator1->weight);
     printf("MIN: Index=%td Age=%d Weight=%f\n", ageIterator2 - persons, ageIterator2->age, ageIterator2->weight);
     printf("MIN: Index=%td Age=%d Weight=%f\n", weightIterator - persons, weightIterator->age, weightIterator->weight);
+
+    // Пример работы с std::algorithm
+    printf("all_of: %d\n", std::all_of(PersonListIterator(head), PersonListIterator(nullptr),
+        [](const Person& p) {
+            return p.age >= 19;
+        })
+    );
+
+    std::for_each(PersonListIterator(head), PersonListIterator(nullptr), Print);
 
     delete head;
     delete n2;
