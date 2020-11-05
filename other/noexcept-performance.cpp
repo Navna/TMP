@@ -10,7 +10,7 @@ struct SomeType {
     SomeType(const SomeType&) {
         puts("copy ctor");
     }
-    SomeType(SomeType&& rhs) noexcept {
+    SomeType(SomeType&&) noexcept {
         puts("move ctor");
     }
     SomeType& operator=(const SomeType&) {
