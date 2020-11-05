@@ -100,10 +100,20 @@ Vector& operator+=(Vector& lhs, const Vector& rhs) {
     return lhs;
 }
 
-Vector operator+(const Vector& lhs, const Vector& rhs) {
+Vector operator+(Vector lhs, const Vector& rhs) {
+    lhs += rhs;
+    return lhs;
+}
+
+Vector SumViaPassByConstRef(const Vector& lhs, const Vector& rhs) {
     Vector result(lhs);
     result += rhs;
     return result;
+}
+
+Vector SumViaPassByValue(Vector lhs, const Vector& rhs) {
+    lhs += rhs;
+    return lhs;
 }
 
 void Print(const Vector& v) {
@@ -119,11 +129,22 @@ int main() {
     v1[1] = 2;
     v1[2] = 3;
 
-    Vector v2(4);
-    v2[0] = 4;
-    v2[1] = 3;
-    v2[2] = 2;
-    v2[3] = 1;
+    Vector v2(3);
+    v2[0] = 2;
+    v2[1] = 4;
+    v2[2] = 6;
 
-    std::swap(v1, v2);
+    Vector v3(3);
+    v3[0] = 1;
+    v3[1] = 1;
+    v3[2] = 1;
+
+    puts("Sum via pass by const ref:");
+    const auto r1 = SumViaPassByConstRef(SumViaPassByConstRef(v1, v2), v3);
+    Print(r1);
+    puts("");
+
+    puts("Sum via pass by value:");
+    const auto r2 = SumViaPassByValue(SumViaPassByValue(v1, v2), v3);
+    Print(r2);
 }
