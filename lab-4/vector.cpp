@@ -8,6 +8,20 @@ struct Vector {
 
     virtual void SetValue(size_t index, float value) = 0;
 
+    bool Equals(const Vector& rhs) const {
+        const auto size = GetSize();
+        if (size != rhs.GetSize()) {
+            return false;
+        }
+        // WARNING: Float equality comparison!
+        for (size_t i = 0; i < size; ++i) {
+            if (GetValue(i) != rhs.GetValue(size)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     virtual ~Vector() = default;
 
 protected:
