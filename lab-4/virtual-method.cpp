@@ -31,6 +31,31 @@ struct B : public A {
 };
 
 int main() {
+    // Приведение типов для указателей
+    {
+        A* p = new B();
+        cout << dynamic_cast<B*>(p) << endl;
+        delete p;
+    }
+    {
+        A* p = new A();
+        cout << dynamic_cast<B*>(p) << endl;
+        delete p;
+    }
+
+    // Приведение типов для ссылок
+    {
+        A* p = new B();
+        dynamic_cast<B&>(*p).vf();
+        delete p;
+    }
+    {
+        A* p = new A();
+        //dynamic_cast<B&>(*p).vf();
+        delete p;
+    }
+
+
     A* paa = new A();   //   Формальный тип: A   Фактический тип: A
     A* pab = new B();   //   Формальный тип: A   Фактический тип: B
     B* pbb = new B();   //   Формальный тип: B   Фактический тип: B
