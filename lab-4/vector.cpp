@@ -9,6 +9,11 @@ struct Vector {
     virtual void SetValue(size_t index, float value) = 0;
 
     virtual ~Vector() = default;
+
+protected:
+    Vector() = default;
+    Vector(const Vector&) = default;
+    Vector& operator=(const Vector& rhs) = default;
 };
 
 void Print(const Vector& v) {
