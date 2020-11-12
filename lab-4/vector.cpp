@@ -7,6 +7,8 @@ struct Vector {
     virtual float GetValue(size_t index) const = 0;
 
     virtual void SetValue(size_t index, float value) = 0;
+
+    virtual ~Vector() = default;
 };
 
 void Print(const Vector& v) {

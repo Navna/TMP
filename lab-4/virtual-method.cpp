@@ -10,6 +10,10 @@ struct A {
     virtual void vf() const {
         cout << "A::vf()" << endl;
     }
+
+    virtual ~A() {
+        cout << "A::~A()" << endl;
+    }
 };
 
 struct B : public A {
@@ -19,6 +23,10 @@ struct B : public A {
 
     virtual void vf() const override {
         cout << "B::vf()" << endl;
+    }
+
+    ~B() {
+        cout << "B::~B()" << endl;
     }
 };
 
@@ -36,4 +44,14 @@ int main() {
     paa->vf();
     pab->vf();
     pbb->vf();
+
+    cout << endl;
+
+    delete paa;
+    cout << endl;
+
+    delete pab;
+    cout << endl;
+
+    delete pbb;
 }
