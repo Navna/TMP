@@ -22,22 +22,27 @@ struct Vector {
         return true;
     }
 
+    void Print(std::ostream& stream) const {
+        stream << "[";
+        PrintRealType(stream);
+        stream << "]";
+
+        const auto n = GetSize();
+        for (size_t i = 0; i < n; ++i) {
+            stream << " " << GetValue(i);
+        }
+        stream << std::endl;
+    }
+
     virtual ~Vector() = default;
 
 protected:
     Vector() = default;
     Vector(const Vector&) = default;
     Vector& operator=(const Vector& rhs) = default;
+
+    virtual void PrintRealType(std::ostream& stream) const = 0;
 };
-
-void Print(const Vector& v) {
-    const auto n = v.GetSize();
-
-    for (size_t i = 0; i < n; ++i) {
-        std::cout << v.GetValue(i) << " ";
-    }
-    std::cout << std::endl;
-}
 
 void Sum(const Vector& lhs, const Vector& rhs, Vector& dst) {
     const auto n = dst.GetSize();
@@ -49,7 +54,7 @@ void Sum(const Vector& lhs, const Vector& rhs, Vector& dst) {
     }
 }
 
-class BufferedVector : public Vector {
+class BufferedVector final : public Vector {
     std::vector<float> data;
 
 public:
@@ -68,9 +73,14 @@ public:
     virtual void SetValue(size_t index, float value) override {
         data[index] = value;
     }
+
+protected:
+    virtual void PrintRealType(std::ostream& stream) const override {
+        stream << "BufferedVector";
+    }
 };
 
-class SubVector : public Vector {
+class SubVector final : public Vector {
     Vector& v;
     size_t start;
     size_t size;
@@ -89,6 +99,11 @@ public:
     virtual void SetValue(size_t index, float value) override {
         v.SetValue(start + index, value);
     }
+    
+protected:
+    virtual void PrintRealType(std::ostream& stream) const override {
+        stream << "SubVector";
+    }
 };
 
 int main() {
@@ -105,20 +120,21 @@ int main() {
 
     SubVector v3(v1, 0, 2);
 
-    Print(v1);
-    Print(v2);
-    Print(v3);
+    v1.Print(std::cout);
+    v2.Print(std::cout);
+    v3.Print(std::cout);
+    
     std::cout << std::endl;
 
     v3.SetValue(0, -3);
-    Print(v1);
-    Print(v2);
-    Print(v3);
+    v1.Print(std::cout);
+    v2.Print(std::cout);
+    v3.Print(std::cout);
     std::cout << std::endl;
 
     SubVector v4(v1, 3, 2);
     Sum(v2, v3, v4);
-    Print(v1);
-    Print(v2);
-    Print(v3);
+    v1.Print(std::cout);
+    v2.Print(std::cout);
+    v3.Print(std::cout);
 }
